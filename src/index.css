@@ -79,3 +79,33 @@ button:hover, a:hover, .interactive:hover {
   opacity: .3;
   transition: 0s;
 }
+
+/* Add the custom class for crypto-diamonds */
+.crypto-diamonds {
+  font-family: 'Arial', sans-serif;
+}
+
+/* Responsive adjustments for CryptoDiamonds */
+@media (max-width: 640px) {
+  .crypto-diamonds .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .crypto-diamonds .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .crypto-diamonds .grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .crypto-diamonds .grid {
+    grid-template-columns: repeat(10, 1fr);
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowUpDown, ExternalLink } from 'lucide-react'
+import CryptoDiamonds from '../components/CryptoDiamonds'
 
 interface Token {
   id: string;
@@ -49,6 +50,12 @@ const TokenExplorer: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Token Explorer</h1>
+      
+      {/* CryptoDiamonds component */}
+      <div className="mb-12">
+        <CryptoDiamonds />
+      </div>
+
       <div className="overflow-x-auto">
         <table className="w-full bg-gray-800 rounded-lg shadow-lg">
           <thead>
@@ -95,6 +102,24 @@ const TokenExplorer: React.FC = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Responsive card layout for mobile */}
+      <div className="md:hidden mt-8">
+        {tokens.map((token) => (
+          <div key={token.id} className="bg-gray-800 p-4 rounded-lg shadow mb-4">
+            <h3 className="font-bold">{token.name} ({token.symbol})</h3>
+            <p>Price: ${token.price.toLocaleString()}</p>
+            <p className={`${token.change24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+              24h Change: {token.change24h.toFixed(2)}%
+            </p>
+            <p>Market Cap: ${token.marketCap.toLocaleString()}</p>
+            <p>24h Volume: ${token.volume24h.toLocaleString()}</p>
+            <Link to={`/tokens/${token.id}`} className="text-blue-400 hover:text-blue-300 mt-2 inline-block">
+              Details <ExternalLink className="inline ml-1" size={16} />
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
