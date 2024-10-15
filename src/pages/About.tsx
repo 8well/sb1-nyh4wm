@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import { Cpu, TrendingUp, Users } from 'lucide-react'
 
 const About: React.FC = () => {
