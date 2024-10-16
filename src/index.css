@@ -80,32 +80,29 @@ button:hover, a:hover, .interactive:hover {
   transition: 0s;
 }
 
-/* Add the custom class for crypto-diamonds */
-.crypto-diamonds {
-  font-family: 'Arial', sans-serif;
-}
-
-/* Responsive adjustments for CryptoDiamonds */
-@media (max-width: 640px) {
-  .crypto-diamonds .grid {
-    grid-template-columns: repeat(2, 1fr);
+/* Custom animations for CryptoDiamonds */
+@keyframes spin-pulse {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
   }
 }
 
-@media (min-width: 641px) and (max-width: 768px) {
-  .crypto-diamonds .grid {
-    grid-template-columns: repeat(3, 1fr);
+@keyframes spin-reverse-pulse {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(-180deg) scale(1.1);
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
-  .crypto-diamonds .grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
+.animate-spin-pulse {
+  animation: spin-pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@media (min-width: 1025px) {
-  .crypto-diamonds .grid {
-    grid-template-columns: repeat(10, 1fr);
-  }
+.animate-spin-reverse-pulse {
+  animation: spin-reverse-pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

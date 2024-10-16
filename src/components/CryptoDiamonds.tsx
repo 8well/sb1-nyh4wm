@@ -11,10 +11,9 @@ interface Cryptocurrency {
   price_change_percentage_24h_in_currency: number;
   price_change_percentage_7d_in_currency: number;
   price_change_percentage_30d_in_currency: number;
-  price_change_percentage_1y_in_currency: number;
 }
 
-const timeFrames = ['1h', '24h', '7d', '30d', '1y'];
+const timeFrames = ['1h', '24h', '7d', '30d'];
 
 const colorRanges = [
   { range: '> 20%', color: 'bg-green-600' },
@@ -48,7 +47,7 @@ const CryptoDiamonds: React.FC = () => {
               per_page: 100,
               page: 1,
               sparkline: false,
-              price_change_percentage: '1h,24h,7d,30d,1y',
+              price_change_percentage: '1h,24h,7d,30d',
             },
           }
         );
@@ -74,8 +73,6 @@ const CryptoDiamonds: React.FC = () => {
         return crypto.price_change_percentage_7d_in_currency;
       case '30d':
         return crypto.price_change_percentage_30d_in_currency;
-      case '1y':
-        return crypto.price_change_percentage_1y_in_currency;
       default:
         return 0;
     }
@@ -107,7 +104,11 @@ const CryptoDiamonds: React.FC = () => {
 
   return (
     <div className="crypto-diamonds">
-      <h2 className="text-3xl font-bold mb-6 text-center">Crypto Diamonds</h2>
+      <h2 className="text-3xl font-bold mb-2 text-center">Crypto Diamonds</h2>
+      <p className="text-center text-gray-300 mb-6">
+        Each diamond represents a cryptocurrency. The color indicates the price change percentage,
+        while the size reflects market capitalization. Hover over a diamond for more details.
+      </p>
       <div className="mb-4 flex justify-center">
         {timeFrames.map((timeFrame) => (
           <button
