@@ -53,9 +53,13 @@ const TokenExplorer: React.FC = () => {
       
       {/* CryptoDiamonds component */}
       <div className="mb-12">
+        <h2 className="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+          Top 50 Crypto Diamonds
+        </h2>
         <CryptoDiamonds />
       </div>
 
+      <h2 className="text-2xl font-bold mb-4">Token List</h2>
       <div className="overflow-x-auto">
         <table className="w-full bg-gray-800 rounded-lg shadow-lg">
           <thead>

@@ -11,32 +11,30 @@ interface Cryptocurrency {
   price_change_percentage_24h_in_currency: number;
   price_change_percentage_7d_in_currency: number;
   price_change_percentage_30d_in_currency: number;
+  price_change_percentage_1y_in_currency: number;
+  market_cap_rank: number;
 }
 
-const timeFrames = ['1h', '24h', '7d', '30d'];
+const timeFrames = ['1h', '24h', '7d', '30d', '1y'];
 
 const colorRanges = [
-  { range: '> 20%', color: 'bg-green-600' },
-  { range: '10% to 20%', color: 'bg-green-500' },
-  { range: '5% to 10%', color: 'bg-green-400' },
-  { range: '0% to 5%', color: 'bg-green-300' },
-  { range: '0%', color: 'bg-gray-300' },
-  { range: '-5% to 0%', color: 'bg-red-300' },
-  { range: '-10% to -5%', color: 'bg-red-400' },
-  { range: '-20% to -10%', color: 'bg-red-500' },
-  { range: '< -20%', color: 'bg-red-600' },
+  { range: '> 20%', color: 'from-green-600 to-green-400' },
+  { range: '10% to 20%', color: 'from-green-500 to-green-300' },
+  { range: '5% to 10%', color: 'from-green-400 to-green-200' },
+  { range: '0% to 5%', color: 'from-green-300 to-green-100' },
+  { range: '0%', color: 'from-gray-400 to-gray-200' },
+  { range: '-5% to 0%', color: 'from-red-300 to-red-100' },
+  { range: '-10% to -5%', color: 'from-red-400 to-red-200' },
+  { range: '-20% to -10%', color: 'from-red-500 to-red-300' },
+  { range: '< -20%', color: 'from-red-600 to-red-400' },
 ];
 
 const CryptoDiamonds: React.FC = () => {
   const [cryptoData, setCryptoData] = useState<Cryptocurrency[]>([]);
   const [selectedTimeFrame, setSelectedTimeFrame] = useState('24h');
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
       try {
         const response = await axios.get<Cryptocurrency[]>(
           'https://api.coingecko.com/api/v3/coins/markets',
@@ -44,19 +42,16 @@ const CryptoDiamonds: React.FC = () => {
             params: {
               vs_currency: 'usd',
               order: 'market_cap_desc',
-              per_page: 100,
+              per_page: 50,
               page: 1,
               sparkline: false,
-              price_change_percentage: '1h,24h,7d,30d',
+              price_change_percentage: '1h,24h,7d,30d,1y',
             },
           }
         );
         setCryptoData(response.data);
       } catch (error) {
         console.error('Error fetching cryptocurrency data:', error);
-        setError('Failed to fetch cryptocurrency data. Please try again later.');
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -73,50 +68,39 @@ const CryptoDiamonds: React.FC = () => {
         return crypto.price_change_percentage_7d_in_currency;
       case '30d':
         return crypto.price_change_percentage_30d_in_currency;
+      case '1y':
+        return crypto.price_change_percentage_1y_in_currency;
       default:
         return 0;
     }
   };
 
   const getColorForPercentage = (percentage: number) => {
-    if (percentage > 20) return 'bg-green-600';
-    if (percentage > 10) return 'bg-green-500';
-    if (percentage > 5) return 'bg-green-400';
-    if (percentage > 0) return 'bg-green-300';
-    if (percentage === 0) return 'bg-gray-300';
-    if (percentage > -5) return 'bg-red-300';
-    if (percentage > -10) return 'bg-red-400';
-    if (percentage > -20) return 'bg-red-500';
-    return 'bg-red-600';
+    if (percentage > 20) return 'from-green-600 to-green-400';
+    if (percentage > 10) return 'from-green-500 to-green-300';
+    if (percentage > 5) return 'from-green-400 to-green-200';
+    if (percentage > 0) return 'from-green-300 to-green-100';
+    if (percentage === 0) return 'from-gray-400 to-gray-200';
+    if (percentage > -5) return 'from-red-300 to-red-100';
+    if (percentage > -10) return 'from-red-400 to-red-200';
+    if (percentage > -20) return 'from-red-500 to-red-300';
+    return 'from-red-600 to-red-400';
   };
 
   const sortedCryptoData = [...cryptoData].sort((a, b) => 
     getPercentageChange(b) - getPercentageChange(a)
   );
 
-  if (isLoading) {
-    return <div className="text-center">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
-  }
-
   return (
     <div className="crypto-diamonds">
-      <h2 className="text-3xl font-bold mb-2 text-center">Crypto Diamonds</h2>
-      <p className="text-center text-gray-300 mb-6">
-        Each diamond represents a cryptocurrency. The color indicates the price change percentage,
-        while the size reflects market capitalization. Hover over a diamond for more details.
-      </p>
-      <div className="mb-4 flex justify-center">
+      <div className="mb-8 flex justify-center">
         {timeFrames.map((timeFrame) => (
           <button
             key={timeFrame}
-            className={`mx-2 px-4 py-2 rounded ${
+            className={`mx-2 px-6 py-3 rounded-full text-lg font-semibold transition-all duration-300 ${
               selectedTimeFrame === timeFrame
-                ? 'bg-blue-500 text-white'
-                : 'bg-white text-blue-500 hover:bg-blue-100'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg scale-105'
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
             onClick={() => setSelectedTimeFrame(timeFrame)}
           >
@@ -124,32 +108,35 @@ const CryptoDiamonds: React.FC = () => {
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-12">
         {sortedCryptoData.map((crypto) => {
           const percentageChange = getPercentageChange(crypto);
           return (
             <div
               key={crypto.id}
-              className={`relative w-24 h-24 ${getColorForPercentage(percentageChange)} rounded-lg shadow-lg transform rotate-45 overflow-hidden cursor-pointer transition-transform hover:scale-110`}
+              className={`relative w-full h-40 bg-gradient-to-br ${getColorForPercentage(percentageChange)} rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-110 hover:rotate-45 group`}
               title={`${crypto.name} (${crypto.symbol.toUpperCase()})\nMarket Cap: $${crypto.market_cap.toLocaleString()}\nPrice: $${crypto.current_price.toLocaleString()}\nChange (${selectedTimeFrame}): ${percentageChange.toFixed(2)}%`}
             >
-              <div className="absolute inset-0 flex items-center justify-center transform -rotate-45">
-                <div className="text-center">
-                  <p className="font-bold text-xs">{crypto.symbol.toUpperCase()}</p>
-                  <p className="text-xs">{percentageChange.toFixed(1)}%</p>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center transition-all duration-500 group-hover:rotate-[-45deg] group-hover:scale-110">
+                  <p className="font-bold text-xl text-white mb-1">{crypto.symbol.toUpperCase()}</p>
+                  <p className="text-lg text-white font-semibold">{percentageChange.toFixed(1)}%</p>
                 </div>
+              </div>
+              <div className="absolute bottom-2 right-2 text-xs text-white opacity-70">
+                #{crypto.market_cap_rank}
               </div>
             </div>
           );
         })}
       </div>
-      <div className="mt-8">
-        <h3 className="text-xl font-bold mb-4 text-center">Color Key</h3>
-        <div className="flex flex-wrap justify-center gap-4">
+      <div className="mt-12">
+        <h2 className="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">Color Key</h2>
+        <div className="flex flex-wrap justify-center gap-6">
           {colorRanges.map(({ range, color }) => (
-            <div key={range} className="flex items-center">
-              <div className={`w-6 h-6 ${color} rounded mr-2`}></div>
-              <span>{range}</span>
+            <div key={range} className="flex items-center bg-gray-800 rounded-full px-4 py-2 shadow-md">
+              <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${color} mr-3`}></div>
+              <span className="text-sm">{range}</span>
             </div>
           ))}
         </div>
