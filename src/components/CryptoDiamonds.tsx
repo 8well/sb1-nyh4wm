@@ -11,11 +11,10 @@ interface Cryptocurrency {
   price_change_percentage_24h_in_currency: number;
   price_change_percentage_7d_in_currency: number;
   price_change_percentage_30d_in_currency: number;
-  price_change_percentage_1y_in_currency: number;
   market_cap_rank: number;
 }
 
-const timeFrames = ['1h', '24h', '7d', '30d', '1y'];
+const timeFrames = ['1h', '24h', '7d', '30d'];
 
 const colorRanges = [
   { range: '> 20%', color: 'from-green-600 to-green-400' },
@@ -45,7 +44,7 @@ const CryptoDiamonds: React.FC = () => {
               per_page: 50,
               page: 1,
               sparkline: false,
-              price_change_percentage: '1h,24h,7d,30d,1y',
+              price_change_percentage: '1h,24h,7d,30d',
             },
           }
         );
@@ -68,8 +67,6 @@ const CryptoDiamonds: React.FC = () => {
         return crypto.price_change_percentage_7d_in_currency;
       case '30d':
         return crypto.price_change_percentage_30d_in_currency;
-      case '1y':
-        return crypto.price_change_percentage_1y_in_currency;
       default:
         return 0;
     }
